@@ -16,8 +16,7 @@ public class BlackListController extends HttpServlet {
 
     @Override
     public void init() {
-        Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-        this.blackListService = new BlackListService(new BlackListRepository(conn));
+        this.blackListService = new BlackListService(new BlackListRepository());
 
     }
 

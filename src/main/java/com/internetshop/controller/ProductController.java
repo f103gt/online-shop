@@ -18,8 +18,7 @@ public class ProductController extends HttpServlet {
     private ProductRepository productRepo;
 
     public void init() {
-        Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-        productRepo = new ProductRepository(conn);
+        productRepo = new ProductRepository();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

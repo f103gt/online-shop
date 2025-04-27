@@ -7,12 +7,10 @@ import com.internetshop.model.Role;
 import com.internetshop.model.User;
 import com.internetshop.services.CartService;
 import com.internetshop.services.UserService;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.*;
 import jakarta.servlet.ServletException;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -20,13 +18,11 @@ public class AuthenticationController extends HttpServlet {
     private static final int MAX_SESSION_PERIOD = 7 * 24 * 60 * 60; // 1 week
 
     private UserService userService;
-    private CartService cartService;
 
     @Override
     public void init() {
-        Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-        this.userService = new UserService(new UserRepository(conn));
-        this.cartService = new CartService(new CartRepository(conn));
+        this.userService = new UserService(new UserRepository());
+//        this.cartService = new CartService(new CartRepository());
     }
 
     @Override
@@ -96,9 +92,9 @@ public class AuthenticationController extends HttpServlet {
             setupUserSession(request, response, user);
 
             if (user.getRole() == Role.ADMIN) {
-                response.sendRedirect(request.getContextPath() + "/black-list");
+                response.sendRedirect(request.getContextPath() + "/debtors");
             } else {
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/products");
             }
 
         } catch (SQLException e) {
@@ -146,8 +142,8 @@ public class AuthenticationController extends HttpServlet {
         newSession.setAttribute("role", user.getRole());
 
         // Get or create cart for user
-        Cart userCart = cartService.getOrCreateCart(user.getId());
-        newSession.setAttribute("cart", userCart);
+//        Cart userCart = cartService.getOrCreateCart(user.getId());
+//        newSession.setAttribute("cart", userCart);
 
         // Set cookies
         Cookie userCookie = new Cookie("userAuth", user.getUsername());

@@ -20,8 +20,7 @@ public class CartController extends HttpServlet {
 
     @Override
     public void init() {
-        Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-        this.cartService = new CartService(new CartRepository(conn));
+        this.cartService = new CartService(new CartRepository());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

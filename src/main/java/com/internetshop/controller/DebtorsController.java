@@ -21,9 +21,8 @@ public class DebtorsController extends HttpServlet {
 
     @Override
     public void init() {
-        Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-        this.orderService = new OrderService(new OrderRepository(conn));
-        this.blackListService = new BlackListService(new BlackListRepository(conn));
+        this.orderService = new OrderService(new OrderRepository());
+        this.blackListService = new BlackListService(new BlackListRepository());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -70,7 +70,7 @@ public class DatabaseConfig {
                     "order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
                     "receival_date TIMESTAMP, " +
                     "total_amount DECIMAL(10,2) NOT NULL, " +
-                    "status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED')))");
+                    "status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PROCESSING')))");
 
             // Order items junction table
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS order_items (" +
