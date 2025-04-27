@@ -1,0 +1,87 @@
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>Internet Shop</display-name>
+
+    <session-config>
+        <session-timeout>30</session-timeout> <!-- 30 minutes -->
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure> <!-- Set to true in production with HTTPS -->
+            <path>/</path> <!-- Available across entire application -->
+        </cookie-config>
+    </session-config>
+
+    <!-- Authentication Filter -->
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>com.internetshop.configurations.AuthenticationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>AuthenticationController</servlet-name>
+        <servlet-class>com.internetshop.controller.AuthenticationController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AuthenticationController</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthenticationController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthenticationController</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BlackListController</servlet-name>
+        <servlet-class>com.internetshop.controller.BlackListController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BlackListController</servlet-name>
+        <url-pattern>/black-list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProductController</servlet-name>
+        <servlet-class>com.internetshop.controller.ProductController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ProductController</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CartController</servlet-name>
+        <servlet-class>com.internetshop.controller.CartController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CartController</servlet-name>
+        <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DebtorsController</servlet-name>
+        <servlet-class>com.internetshop.controller.DebtorsController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DebtorsController</servlet-name>
+        <url-pattern>/debtors</url-pattern>
+    </servlet-mapping>
+</web-app>
