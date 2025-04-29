@@ -6,6 +6,8 @@ import com.internetshop.model.Role;
 import com.internetshop.model.User;
 import com.internetshop.configurations.DatabaseConfig;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +21,12 @@ public class OrderRepository implements Repository<Order> {
         String sql = "INSERT INTO orders (user_id, order_date, total_amount, status) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, order.getUserId());
-            stmt.setDate(2, new java.sql.Date(order.getOrderDate().getTime()));
+            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(order.getOrderDate()));
             stmt.setBigDecimal(3, order.getTotalAmount());
             stmt.setString(4, order.getStatus().toString());
+
             stmt.executeUpdate();
             conn.commit();
         }
@@ -33,7 +37,7 @@ public class OrderRepository implements Repository<Order> {
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, order.getUserId());
-            stmt.setDate(2, new java.sql.Date(order.getOrderDate().getTime()));
+            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(order.getOrderDate()));
             stmt.setBigDecimal(3, order.getTotalAmount());
             stmt.setString(4, order.getStatus().toString());
             stmt.setInt(5, order.getId());
@@ -60,13 +64,14 @@ public class OrderRepository implements Repository<Order> {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     try {
-                        return new Order(
-                                rs.getInt("id"),
-                                rs.getInt("user_id"),
-                                rs.getDate("order_date"),
-                                rs.getBigDecimal("total_amount"),
-                                OrderStatus.fromString(rs.getString("status"))
-                        );
+                        new Order.Builder()
+                                .id(rs.getInt("id"))
+                                .userId( rs.getInt("user_id"))
+                                .orderDate(getOrderDate(rs.getString( "order_date")))
+                                .totalAmount(rs.getBigDecimal("total_amount"))
+                                .receivalDate(getOrderDate("receival_date"))
+                                .status(OrderStatus.fromString(rs.getString("status")))
+                                .build();
                     } catch (IllegalArgumentException e) {
                         throw new SQLException("Invalid order status in database", e);
                     }
@@ -84,13 +89,13 @@ public class OrderRepository implements Repository<Order> {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 try {
-                    orders.add(new Order(
-                            rs.getInt("id"),
-                            rs.getInt("user_id"),
-                            rs.getDate("order_date"),
-                            rs.getBigDecimal("total_amount"),
-                            OrderStatus.fromString(rs.getString("status"))
-                    ));
+                    new Order.Builder()
+                            .id(rs.getInt("id"))
+                            .userId(  rs.getInt("user_id"))
+                            .orderDate(getOrderDate(rs.getString("order_date")))
+                            .totalAmount(rs.getBigDecimal("total_amount"))
+                            .status(OrderStatus.fromString(rs.getString("status")))
+                            .build();
                 } catch (IllegalArgumentException e) {
                     throw new SQLException(
                             String.format("Invalid order status in database for order ID %d: %s",
@@ -148,17 +153,23 @@ public class OrderRepository implements Repository<Order> {
                         rs.getString("u.address")
                 );
 
-                Order order = new Order(
-                        rs.getInt("o.id"),
-                        rs.getInt("o.user_id"),
-                        rs.getTimestamp("o.order_date"),
-                        rs.getBigDecimal("o.total_amount"),
-                        OrderStatus.valueOf(rs.getString("o.status"))
-                );
+                Order order = new Order.Builder()
+                        .id(rs.getInt("id"))
+                        .userId( rs.getInt("user_id"))
+                        .orderDate(getOrderDate(rs.getString( "order_date")))
+                        .receivalDate(getOrderDate("receival_date"))
+                        .totalAmount(rs.getBigDecimal("total_amount"))
+                        .status(OrderStatus.fromString(rs.getString("status")))
+                        .build();
 
                 debtors.computeIfAbsent(user, k -> new ArrayList<>()).add(order);
             }
         }
         return debtors;
+    }
+
+    LocalDateTime getOrderDate(String dataStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(dataStr, formatter);
     }
 }

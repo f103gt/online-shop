@@ -18,6 +18,7 @@ public class OrderService {
     private final OrderRepository repository;
 
     public OrderService(OrderRepository repository) {
+
         this.repository = repository;
     }
 
@@ -27,5 +28,9 @@ public class OrderService {
 
     public Map<User, List<Order>> getUsersWithUnpaidOrders() throws SQLException {
         return repository.getUsersWithUnpaidOrders();
+    }
+
+    public void processOrder(Order order) throws SQLException {
+        repository.insert(order);
     }
 }

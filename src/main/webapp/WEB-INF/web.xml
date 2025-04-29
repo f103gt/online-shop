@@ -5,15 +5,6 @@
 
     <display-name>Internet Shop</display-name>
 
-    <session-config>
-        <session-timeout>30</session-timeout> <!-- 30 minutes -->
-        <cookie-config>
-            <http-only>true</http-only>
-            <secure>false</secure> <!-- Set to true in production with HTTPS -->
-            <path>/</path> <!-- Available across entire application -->
-        </cookie-config>
-    </session-config>
-
     <!-- Authentication Filter -->
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -43,6 +34,12 @@
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>AuthenticationController</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -83,6 +80,16 @@
     <servlet-mapping>
         <servlet-name>CartController</servlet-name>
         <url-pattern>/remove-from-cart</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderController</servlet-name>
+        <servlet-class>com.internetshop.controller.OrderController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OrderController</servlet-name>
+        <url-pattern>/order-checkout</url-pattern>
     </servlet-mapping>
 
     <servlet>
