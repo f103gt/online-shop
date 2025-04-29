@@ -1,11 +1,8 @@
 package com.internetshop.controller;
 
-import com.internetshop.dao.CartRepository;
 import com.internetshop.dao.UserRepository;
-import com.internetshop.model.Cart;
 import com.internetshop.model.Role;
 import com.internetshop.model.User;
-import com.internetshop.services.CartService;
 import com.internetshop.services.UserService;
 import jakarta.servlet.http.*;
 import jakarta.servlet.ServletException;
@@ -22,7 +19,6 @@ public class AuthenticationController extends HttpServlet {
     @Override
     public void init() {
         this.userService = new UserService(new UserRepository());
-//        this.cartService = new CartService(new CartRepository());
     }
 
     @Override
@@ -44,22 +40,6 @@ public class AuthenticationController extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
-
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        String path = request.getRequestURI().substring(request.getContextPath().length());
-//
-//        if (path.equals("/login")) {
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-//            dispatcher.forward(request, response);
-//        } else if (path.equals("/register")) {
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
-//            dispatcher.forward(request, response);
-//        } else {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//        }
-//    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -140,10 +120,6 @@ public class AuthenticationController extends HttpServlet {
         HttpSession newSession = request.getSession(true);
         newSession.setAttribute("user", user);
         newSession.setAttribute("role", user.getRole());
-
-        // Get or create cart for user
-//        Cart userCart = cartService.getOrCreateCart(user.getId());
-//        newSession.setAttribute("cart", userCart);
 
         // Set cookies
         Cookie userCookie = new Cookie("userAuth", user.getUsername());

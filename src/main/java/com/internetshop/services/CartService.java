@@ -5,46 +5,41 @@ import com.internetshop.model.Cart;
 import com.internetshop.model.Product;
 import java.sql.SQLException;
 import java.util.List;
+import java.math.BigDecimal;
+
 
 public class CartService {
     private final CartRepository repository;
 
-    public CartService(CartRepository repository){
+    public CartService(CartRepository repository) {
         this.repository = repository;
     }
 
-    public List<Product> getCartProducts(int cartId) throws SQLException {
-        return repository.getProductsByCartId(cartId);
+    public List<Product> getCartProducts(int userId) throws SQLException {
+        return repository.getProductsByUserId(userId);
     }
 
-    public Cart getOrCreateCart(int userId) throws SQLException {
-        Cart cart = repository.getById(userId);
-        if (cart.getProducts().isEmpty()) {
-            try {
-                repository.insert(cart);
-            } catch (SQLException e) {
-                // Cart might already exist, try to update
-                repository.update(cart);
-            }
-        }
-        return cart;
+    public Cart getCart(int userId) throws SQLException {
+        return repository.getById(userId);
     }
 
-    public void addProductToCart(int cartId, Product product) throws SQLException {
-        Cart cart = repository.getById(cartId);
-        cart.addProduct(product);
-        repository.update(cart);
+    public void addProductToCart(int userId, int productId) throws SQLException {
+        repository.addProductToCart(userId, productId);
     }
 
-    public void removeProductFromCart(int cartId, int productId) throws SQLException {
-        Cart cart = repository.getById(cartId);
-        cart.removeProduct(productId);
-        repository.update(cart);
+    public void removeProductFromCart(int userId, int productId) throws SQLException {
+        repository.removeProductFromCart(userId, productId);
     }
 
-    public void clearCart(int cartId) throws SQLException {
-        Cart cart = repository.getById(cartId);
-        cart.clear();
-        repository.update(cart);
+    public void clearCart(int userId) throws SQLException {
+        repository.delete(userId);
     }
+
+    // TODO: change for something with non decimal number
+    public BigDecimal calculateProductsPrice(List<Product> products) {
+        return products.stream()
+                .map(Product::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
 }

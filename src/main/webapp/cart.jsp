@@ -31,7 +31,7 @@
     <h2 class="mb-4">Your Shopping Cart</h2>
 
     <c:choose>
-        <c:when test="${empty cart.products}">
+        <c:when test="${empty products}">
             <div class="empty-cart">
                 <h4>Your cart is empty</h4>
                 <p>Start shopping to add items to your cart</p>
@@ -46,11 +46,8 @@
                             <h5>Cart Items</h5>
                         </div>
                         <div class="card-body">
-                            <c:forEach items="${cart.products}" var="product">
+                            <c:forEach items="${products}" var="product">
                                 <div class="row cart-item align-items-center">
-                                    <div class="col-md-2">
-                                        <img src="https://via.placeholder.com/80" alt="Product image" class="img-fluid">
-                                    </div>
                                     <div class="col-md-4">
                                         <h6>${product.name}</h6>
                                         <p class="text-muted small">${product.description}</p>
@@ -81,17 +78,18 @@
                         <div class="card-body">
                             <h5 class="card-title">Order Summary</h5>
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Subtotal (${cart.products.size()} items)</span>
-                                <span><fmt:formatNumber value="${cart.totalPrice}" type="currency" currencySymbol="$"/></span>
+                                <span>Subtotal (${products.size()} items)</span>
+                                <span><fmt:formatNumber value="${totalPrice}" type="currency" currencySymbol="$"/></span>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
+                                <span>Shipping</span>
                                 <span>Shipping</span>
                                 <span>Free</span>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between fw-bold mb-4">
                                 <span>Total</span>
-                                <span><fmt:formatNumber value="${cart.totalPrice}" type="currency" currencySymbol="$"/></span>
+                                <span><fmt:formatNumber value="${totalPrice}" type="currency" currencySymbol="$"/></span>
                             </div>
                             <a href="${pageContext.request.contextPath}/checkout" class="btn btn-primary w-100 mb-2">Proceed to Checkout</a>
                             <a href="${pageContext.request.contextPath}/products" class="btn btn-outline-secondary w-100">Continue Shopping</a>

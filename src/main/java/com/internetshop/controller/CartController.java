@@ -11,7 +11,6 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -34,15 +33,13 @@ public class CartController extends HttpServlet {
                 return;
             }
 
-            // Get or create cart for user
-            Cart cart = cartService.getOrCreateCart(user.getId());
-
-            // Get products specific to this cart
+            // Get cart products
             List<Product> cartProducts = cartService.getCartProducts(user.getId());
+            BigDecimal totalPrice = cartService.calculateProductsPrice(cartProducts);
 
             // Set attributes for JSP
             request.setAttribute("products", cartProducts);
-            request.setAttribute("cart", cart);
+            request.setAttribute("totalPrice", totalPrice);
 
             // Forward to cart page
             RequestDispatcher dispatcher = request.getRequestDispatcher("cart.jsp");
@@ -64,19 +61,24 @@ public class CartController extends HttpServlet {
                 return;
             }
 
-            String action = request.getParameter("action");
+            String path = request.getServletPath();
             int productId = Integer.parseInt(request.getParameter("productId"));
 
-            if ("add".equals(action)) {
-                // In a real app, you'd get the Product from ProductService
-                Product product = new Product(productId, "", "",
-                        BigDecimal.ZERO, 0);
-                cartService.addProductToCart(user.getId(), product);
-            } else if ("remove".equals(action)) {
-                cartService.removeProductFromCart(user.getId(), productId);
+            switch (path) {
+                case "/add-to-cart":
+                    cartService.addProductToCart(user.getId(), productId);
+                    session.setAttribute("successMessage", "Product added to cart");
+                    response.sendRedirect(request.getContextPath() + "/products");
+                    break;
+                case "/remove-from-cart":
+                    cartService.removeProductFromCart(user.getId(), productId);
+                    session.setAttribute("successMessage", "Product removed from cart");
+                    response.sendRedirect(request.getContextPath() + "/cart");
+                    break;
+                default:
+                    response.sendRedirect(request.getContextPath() + "/cart");
+                    break;
             }
-
-            response.sendRedirect(request.getContextPath() + "/cart");
 
         } catch (SQLException | NumberFormatException e) {
             throw new ServletException("Error processing cart action", e);

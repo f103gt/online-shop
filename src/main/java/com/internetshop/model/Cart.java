@@ -5,28 +5,23 @@ import java.util.List;
 
 public class Cart {
     private final int userId;
-    private final List<Product> products = new ArrayList<>();
-
+    private final List<Integer> productIds = new ArrayList<>();
     public Cart(int userId) {
         this.userId = userId;
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public void addProductId(int productId) {
+        if (!productIds.contains(productId)) {
+            productIds.add(productId);
+        }
     }
 
-    public void removeProduct(int productId) {
-        products.removeIf(p -> p.getId() == productId);
+    public void removeProductId(int productId) {
+        productIds.remove(Integer.valueOf(productId));
     }
 
-    public List<Product> getProducts() {
-        return new ArrayList<>(products);
-    }
-
-    public double getTotalPrice() {
-        return products.stream()
-                .mapToDouble(p -> p.getPrice().doubleValue())
-                .sum();
+    public List<Integer> getProductIds() {
+        return new ArrayList<>(productIds);
     }
 
     public int getUserId() {
@@ -34,6 +29,6 @@ public class Cart {
     }
 
     public void clear() {
-        products.clear();
+        productIds.clear();
     }
 }

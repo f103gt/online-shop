@@ -51,17 +51,11 @@ public class DatabaseConfig {
                     "user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, " +
                     "order_id INTEGER NOT NULL)");
 
-            // Carts table
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS carts (" +
-                    "id SERIAL PRIMARY KEY, " +
-                    "user_id INTEGER NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE)");
-
             // Cart items junction table
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS cart_products (" +
-                    "cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE, " +
+                    "user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, " +
                     "product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE, " +
-                    "quantity INTEGER NOT NULL DEFAULT 1, " +
-                    "PRIMARY KEY (cart_id, product_id))");
+                    "PRIMARY KEY (user_id, product_id))");
 
             // Orders table
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS orders (" +

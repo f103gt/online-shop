@@ -13,41 +13,31 @@ public class CartRepository implements Repository<Cart> {
 
     @Override
     public void insert(Cart cart) throws SQLException {
-        String sql = "INSERT INTO carts (user_id) VALUES (?)";
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, cart.getUserId());
-            stmt.executeUpdate();
-
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    int cartId = rs.getInt(1);
-                    insertCartProducts(cartId, cart.getProducts());
-                }
-            }
-            conn.commit();
+        if (!cart.getProductIds().isEmpty()) {
+            insertCartProducts(cart.getUserId(), cart.getProductIds());
         }
     }
 
     @Override
     public void update(Cart cart) throws SQLException {
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // First delete all existing products for this cart
-            String deleteSql = "DELETE FROM cart_products WHERE cart_id = ?";
+            String deleteSql = "DELETE FROM cart_products WHERE user_id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(deleteSql)) {
                 stmt.setInt(1, cart.getUserId());
                 stmt.executeUpdate();
             }
 
-            // Then insert the current products
-            insertCartProducts(cart.getUserId(), cart.getProducts());
+            // Then insert the current products if any exist
+            if (!cart.getProductIds().isEmpty()) {
+                insertCartProducts(cart.getUserId(), cart.getProductIds());
+            }
             conn.commit();
         }
     }
 
     @Override
     public void delete(int userId) throws SQLException {
-        String sql = "DELETE FROM carts WHERE user_id = ?";
+        String sql = "DELETE FROM cart_products WHERE user_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);
@@ -58,25 +48,15 @@ public class CartRepository implements Repository<Cart> {
 
     @Override
     public Cart getById(int userId) throws SQLException {
-        String sql = "SELECT p.id, p.name, p.description, p.price, p.stock " +
-                "FROM cart_products cp " +
-                "JOIN products p ON cp.product_id = p.id " +
-                "WHERE cp.cart_id = ?";
-
         Cart cart = new Cart(userId);
+        String sql = "SELECT product_id FROM cart_products WHERE user_id = ?";
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Product product = new Product(
-                            rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getString("description"),
-                            rs.getBigDecimal("price"),
-                            rs.getInt("stock")
-                    );
-                    cart.addProduct(product);
+                    cart.addProductId(rs.getInt("product_id"));
                 }
             }
         }
@@ -88,30 +68,38 @@ public class CartRepository implements Repository<Cart> {
         return new ArrayList<>();
     }
 
-    private void insertCartProducts(int cartId, List<Product> products) throws SQLException {
-        String sql = "INSERT INTO cart_products (cart_id, product_id) VALUES (?, ?)";
+    public void addProductToCart(int userId, int productId) throws SQLException {
+        String sql = "INSERT INTO cart_products (user_id, product_id) VALUES (?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            for (Product product : products) {
-                stmt.setInt(1, cartId);
-                stmt.setInt(2, product.getId());
-                stmt.addBatch();
-            }
-            stmt.executeBatch();
+            stmt.setInt(1, userId);
+            stmt.setInt(2, productId);
+            stmt.executeUpdate();
             conn.commit();
         }
     }
 
-    public List<Product> getProductsByCartId(int cartId) throws SQLException {
+    public void removeProductFromCart(int userId, int productId) throws SQLException {
+        String sql = "DELETE FROM cart_products WHERE user_id = ? AND product_id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, productId);
+            stmt.executeUpdate();
+            conn.commit();
+        }
+    }
+
+    public List<Product> getProductsByUserId(int userId) throws SQLException {
         String sql = "SELECT p.id, p.name, p.description, p.price, p.stock " +
                 "FROM cart_products cp " +
                 "JOIN products p ON cp.product_id = p.id " +
-                "WHERE cp.cart_id = ?";
+                "WHERE cp.user_id = ?";
 
         List<Product> products = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, cartId);
+            stmt.setInt(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Product product = new Product(
@@ -127,4 +115,20 @@ public class CartRepository implements Repository<Cart> {
         }
         return products;
     }
+
+
+    private void insertCartProducts(int userId, List<Integer> productIds) throws SQLException {
+        String sql = "INSERT INTO cart_products (user_id, product_id) VALUES (?, ?)";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (Integer productId : productIds) {
+                stmt.setInt(1, userId);
+                stmt.setInt(2, productId);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+            conn.commit();
+        }
+    }
+
 }

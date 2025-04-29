@@ -75,6 +75,16 @@
         <url-pattern>/cart</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>CartController</servlet-name>
+        <url-pattern>/add-to-cart</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CartController</servlet-name>
+        <url-pattern>/remove-from-cart</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>DebtorsController</servlet-name>
         <servlet-class>com.internetshop.controller.DebtorsController</servlet-class>
