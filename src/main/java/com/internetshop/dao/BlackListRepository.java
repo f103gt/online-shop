@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlackListRepository implements Repository<BlackList> {
+public class BlackListRepository implements BlackListRepositoryInterface {
 
     public BlackListRepository() {
     }

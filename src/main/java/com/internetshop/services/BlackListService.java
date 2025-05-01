@@ -1,6 +1,7 @@
 package com.internetshop.services;
 
 import com.internetshop.dao.BlackListRepository;
+import com.internetshop.dao.BlackListRepositoryInterface;
 import com.internetshop.model.BlackList;
 import com.internetshop.model.User;
 
@@ -8,9 +9,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class BlackListService {
-    private final BlackListRepository repository;
+    private final BlackListRepositoryInterface repository;
 
-    public BlackListService(BlackListRepository repository) {
+    public BlackListService(BlackListRepositoryInterface repository) {
         this.repository = repository;
     }
 
