@@ -94,8 +94,8 @@ public class UserRepository implements Repository<User> {
                                 rs.getString("username"),
                                 rs.getString("password"),
                                 Role.fromString(rs.getString("role")),
-                                rs.getString("email"),
-                                rs.getString("address")
+                                rs.getString("address"),
+                                rs.getString("email")
                         );
                     } catch (IllegalArgumentException e) {
                         throw new SQLException(

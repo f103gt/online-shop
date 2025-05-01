@@ -26,6 +26,14 @@
             this.role = role;
         }
 
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
         public User(int id,
                     String username,
                     String password,

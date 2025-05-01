@@ -55,8 +55,6 @@
             <th>User ID</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Blacklisted Since</th>
-            <th>Actions</th>
           </tr>
           </thead>
           <tbody>
@@ -65,13 +63,6 @@
               <td>${user.id}</td>
               <td>${user.username}</td>
               <td>${user.email}</td>
-              <td>N/A</td> <!-- You can add blacklist date if available -->
-              <td>
-                <button class="btn btn-sm btn-success remove-from-blacklist"
-                        data-user-id="${user.id}">
-                  Remove
-                </button>
-              </td>
             </tr>
           </c:forEach>
           </tbody>
@@ -82,32 +73,5 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $('.remove-from-blacklist').click(function() {
-      const userId = $(this).data('user-id');
-      const button = $(this);
-
-      if(confirm('Are you sure you want to remove this user from blacklist?')) {
-        $.ajax({
-          type: "POST",
-          url: "${pageContext.request.contextPath}/blacklist/remove",
-          data: { userId: userId },
-          success: function(response) {
-            if(response.status === "success") {
-              button.closest('tr').fadeOut(300, function() {
-                $(this).remove();
-              });
-            }
-          },
-          error: function(xhr) {
-            alert("Error removing from blacklist: " + xhr.responseJSON.message);
-          }
-        });
-      }
-    });
-  });
-</script>
 </body>
 </html>

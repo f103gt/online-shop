@@ -52,11 +52,6 @@
         <url-pattern>/black-list</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>BlackListController</servlet-name>
-        <url-pattern>/remove-from-black-list</url-pattern>
-    </servlet-mapping>
-
     <servlet>
         <servlet-name>ProductController</servlet-name>
         <servlet-class>com.internetshop.controller.ProductController</servlet-class>

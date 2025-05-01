@@ -75,7 +75,6 @@ public class DatabaseConfig {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // Drop tables in reverse order of creation to respect foreign key constraints
             stmt.executeUpdate("DROP TABLE IF EXISTS order_items CASCADE");
             stmt.executeUpdate("DROP TABLE IF EXISTS orders CASCADE");
             stmt.executeUpdate("DROP TABLE IF EXISTS cart_products CASCADE");
