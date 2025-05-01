@@ -1,15 +1,17 @@
 package com.internetshop.services;
 
 import com.internetshop.dao.ProductRepository;
+import com.internetshop.dao.Repository;
 import com.internetshop.model.Product;
 import java.sql.SQLException;
 import java.util.List;
 
 public class ProductService {
-    private final ProductRepository productRepository;
+    private final Repository<Product> productRepository;
 
-    public ProductService() {
-        this.productRepository = new ProductRepository();
+    public ProductService(Repository<Product> productRepository) {
+
+        this.productRepository = productRepository;
     }
 
     public List<Product> getAllProducts() throws SQLException {

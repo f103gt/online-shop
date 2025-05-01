@@ -1,5 +1,6 @@
 package com.internetshop.controller;
 
+import com.internetshop.dao.ProductRepository;
 import com.internetshop.model.Product;
 import com.internetshop.model.Role;
 import com.internetshop.model.User;
@@ -19,7 +20,9 @@ public class ProductController extends HttpServlet {
 
     @Override
     public void init() {
-        this.productService = new ProductService();
+        this.productService = new ProductService(
+                new ProductRepository()
+        );
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
