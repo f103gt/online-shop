@@ -18,14 +18,15 @@ public class OrderRepository implements Repository<Order> {
     public OrderRepository() {}
 
     public void insert(Order order) throws SQLException {
-        String sql = "INSERT INTO orders (user_id, order_date, total_amount, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO orders (user_id, order_date, receival_date, total_amount, status) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, order.getUserId());
             stmt.setTimestamp(2, java.sql.Timestamp.valueOf(order.getOrderDate()));
-            stmt.setBigDecimal(3, order.getTotalAmount());
-            stmt.setString(4, order.getStatus().toString());
+            stmt.setTimestamp(3, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setBigDecimal(4, order.getTotalAmount());
+            stmt.setString(5, order.getStatus().toString());
 
             stmt.executeUpdate();
             conn.commit();
@@ -135,29 +136,33 @@ public class OrderRepository implements Repository<Order> {
     }
 
     public Map<User, List<Order>> getUsersWithUnpaidOrders() throws SQLException {
-        String sql = "SELECT u.*, o.* FROM users u " +
-                "JOIN orders o ON u.id = o.user_id " +
-                "WHERE o.status = 'PENDING' AND o.receival_date IS NOT NULL";
+        String sql = "SELECT users.id as user_id, users.username, users.password, users.role, " +
+                "users.email, users.address, orders.id as order_id, orders.user_id, " +
+                "orders.order_date, orders.receival_date, orders.total_amount, orders.status " +
+                "FROM users JOIN orders ON users.id = orders.user_id " +
+                "WHERE orders.status = 'PENDING' AND orders.receival_date IS NOT NULL";
 
         Map<User, List<Order>> debtors = new HashMap<>();
         try (Connection conn = DatabaseConfig.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 User user = new User(
-                        rs.getInt("u.id"),
-                        rs.getString("u.username"),
-                        rs.getString("u.password"),
-                        Role.valueOf(rs.getString("u.role")),
-                        rs.getString("u.email"),
-                        rs.getString("u.address")
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role")),
+                        rs.getString("email"),
+                        rs.getString("address")
                 );
 
                 Order order = new Order.Builder()
-                        .id(rs.getInt("id"))
-                        .userId( rs.getInt("user_id"))
-                        .orderDate(getOrderDate(rs.getString( "order_date")))
-                        .receivalDate(getOrderDate("receival_date"))
+                        .id(rs.getInt("order_id"))
+                        .userId(rs.getInt("user_id"))
+                        .orderDate(rs.getTimestamp("order_date").toLocalDateTime())
+                        .receivalDate(rs.getTimestamp("receival_date") != null ?
+                                rs.getTimestamp("receival_date").toLocalDateTime() : null)
                         .totalAmount(rs.getBigDecimal("total_amount"))
                         .status(OrderStatus.fromString(rs.getString("status")))
                         .build();

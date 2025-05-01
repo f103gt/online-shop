@@ -36,6 +36,9 @@ public class AuthenticationController extends HttpServlet {
             case "/register":
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 break;
+            case "/logout":
+                handleLogout(request, response);
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -132,6 +135,30 @@ public class AuthenticationController extends HttpServlet {
         roleCookie.setMaxAge(MAX_SESSION_PERIOD);
         roleCookie.setPath("/");
         response.addCookie(roleCookie);
+    }
+
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        // Invalidate the session
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Clear cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userAuth") || cookie.getName().equals("userRole")) {
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                }
+            }
+        }
+
+        // Redirect to homepage
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }
 // Alt + Shift + ,  or Alt + Shift + .

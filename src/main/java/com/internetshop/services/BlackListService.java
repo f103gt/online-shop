@@ -23,18 +23,6 @@ public class BlackListService {
         repository.delete(id);
     }
 
-    public void updateBlackListEntry(BlackList entry) throws SQLException {
-        repository.update(entry);
-    }
-
-    public BlackList getBlackListEntry(int id) throws SQLException {
-        return repository.getById(id);
-    }
-
-    public List<BlackList> getAllBlackListEntries() throws SQLException {
-        return repository.getAll();
-    }
-
     public List<User> getBlacklistedUsers() throws SQLException {
         return repository.getBlacklistedUsers();
     }

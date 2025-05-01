@@ -59,7 +59,7 @@ public class OrderController extends HttpServlet {
             Order order = new Order.Builder()
                     .userId(user.getId())
                     .orderDate(LocalDateTime.now())
-                    .totalAmount(Double.parseDouble(request.getParameter("totalAmount")))
+                    .totalAmount(Double.parseDouble("123"))
                     .status(status)
                     .build();
             // Process payment and save order

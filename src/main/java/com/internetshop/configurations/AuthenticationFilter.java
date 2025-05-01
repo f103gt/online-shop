@@ -36,12 +36,20 @@ public class AuthenticationFilter implements Filter {
 
         // Check role-based access
         if (path.startsWith("/black-list") || path.startsWith("/debtors")) {
+            // ADMIN-only paths
             if (userRole != Role.ADMIN) {
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
                 return;
             }
-        } else if (path.startsWith("/products") || path.startsWith("/cart")) {
+        } else if (path.startsWith("/cart")) {
+            // CUSTOMER-only paths
             if (userRole != Role.CUSTOMER) {
+                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+                return;
+            }
+        } else if (path.startsWith("/products")) {
+            // Allow both ADMIN (for management) and CUSTOMER (for shopping)
+            if (userRole != Role.CUSTOMER && userRole != Role.ADMIN) {
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
                 return;
             }

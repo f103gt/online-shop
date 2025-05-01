@@ -19,7 +19,7 @@
                         <div class="alert alert-danger">${errorMessage}</div>
                     </c:if>
 
-                    <form action="${pageContext.request.contextPath}/order-checkout" method="post">
+                    <form action="${pageContext.request.contextPath}/checkout" method="post">
                         <input type="hidden" name="totalAmount" value="${totalPrice}">
 
                         <div class="mb-3">

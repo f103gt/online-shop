@@ -48,7 +48,7 @@ public class DatabaseConfig {
             // Blacklist table
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS blacklist (" +
                     "id SERIAL PRIMARY KEY, " +
-                    "user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, " +
+                    "user_id INTEGER NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE, " +
                     "order_id INTEGER NOT NULL)");
 
             // Cart items junction table
@@ -65,14 +65,6 @@ public class DatabaseConfig {
                     "receival_date TIMESTAMP, " +
                     "total_amount DECIMAL(10,2) NOT NULL, " +
                     "status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PROCESSING')))");
-
-            // Order items junction table
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS order_items (" +
-                    "order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE, " +
-                    "product_id INTEGER NOT NULL REFERENCES products(id), " +
-                    "quantity INTEGER NOT NULL, " +
-                    "price_at_purchase DECIMAL(10,2) NOT NULL, " +
-                    "PRIMARY KEY (order_id, product_id))");
 
             conn.commit();
             System.out.println("All tables created successfully");

@@ -35,7 +35,6 @@ public class CartService {
         repository.delete(userId);
     }
 
-    // TODO: change for something with non decimal number
     public BigDecimal calculateProductsPrice(List<Product> products) {
         return products.stream()
                 .map(Product::getPrice)

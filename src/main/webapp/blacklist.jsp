@@ -20,14 +20,9 @@
 <div class="container">
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
     <div class="container-fluid">
-      <a class="navbar-brand" href="${pageContext.request.contextPath}/products">Internet Shop</a>
+      <a class="navbar-brand" href="${pageContext.request.contextPath}/">Internet Shop</a>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/products">
-              <i class="bi bi-shop"></i> Products
-            </a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/black-list">
               <i class="bi bi-list-ul"></i> Blacklist
