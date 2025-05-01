@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class Order {
-    private final int id;
+    private int id;
     private final int userId;
     private final LocalDateTime orderDate;
     private final LocalDateTime receivalDate;
@@ -49,6 +49,10 @@ public class Order {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     // Builder class

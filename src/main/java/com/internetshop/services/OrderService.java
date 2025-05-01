@@ -1,6 +1,7 @@
 package com.internetshop.services;
 
 import com.internetshop.dao.OrderRepository;
+import com.internetshop.dao.OrderRepositoryInterface;
 import com.internetshop.model.Order;
 import com.internetshop.model.Product;
 import com.internetshop.model.User;
@@ -10,10 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderService {
-    private final OrderRepository orderRepository;
+    private final OrderRepositoryInterface orderRepository;
     private final CartService cartService;
 
-    public OrderService(OrderRepository orderRepository, CartService cartService) {
+    public OrderService(
+            OrderRepositoryInterface orderRepository, CartService cartService) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
     }

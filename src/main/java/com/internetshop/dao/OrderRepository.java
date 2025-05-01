@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrderRepository implements Repository<Order> {
+public class OrderRepository implements OrderRepositoryInterface {
 
     public OrderRepository() {}
 
