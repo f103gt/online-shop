@@ -6,6 +6,8 @@ import com.internetshop.model.User;
 import com.internetshop.services.UserService;
 import jakarta.servlet.http.*;
 import jakarta.servlet.ServletException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 public class AuthenticationController extends HttpServlet {
     private static final int MAX_SESSION_PERIOD = 7 * 24 * 60 * 60; // 1 week
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private UserService userService;
 
@@ -28,18 +31,23 @@ public class AuthenticationController extends HttpServlet {
 
         switch (path) {
             case "/":
+                logger.info("Displaying home page");
                 request.getRequestDispatcher("home.jsp").forward(request, response);
                 break;
             case "/login":
+                logger.info("Logging in a user");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 break;
             case "/register":
+                logger.info("Registering a user");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 break;
             case "/logout":
+                logger.info("Logging out a user");
                 handleLogout(request, response);
                 break;
             default:
+                logger.error("The required source was not found");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -109,6 +117,7 @@ public class AuthenticationController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/");
 
         } catch (SQLException e) {
+            logger.error("SQL error " + e);
             response.sendRedirect(request.getContextPath() + "/register?error=db");
         }
     }
