@@ -1,13 +1,14 @@
 package com.internetshop.controller;
 
+import com.internetshop.dao.CartRepository;
 import com.internetshop.dao.OrderRepository;
 import com.internetshop.model.Order;
 import com.internetshop.model.OrderStatus;
 import com.internetshop.model.User;
+import com.internetshop.services.CartService;
 import com.internetshop.services.OrderService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Or;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,11 +19,11 @@ public class OrderController extends HttpServlet {
 
     @Override
     public void init() {
-        this.orderService = new OrderService(new OrderRepository());
+
+        this.orderService = new OrderService(new OrderRepository(), new CartService(new CartRepository()));
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
@@ -32,7 +33,6 @@ public class OrderController extends HttpServlet {
                 return;
             }
 
-            // Show checkout form
             request.getRequestDispatcher("/checkout.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -40,8 +40,8 @@ public class OrderController extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+            ServletException, IOException {
         try {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
@@ -51,18 +51,13 @@ public class OrderController extends HttpServlet {
                 return;
             }
 
-            // Process payment and create order
             String paymentStatus = request.getParameter("paymentStatus");
-            OrderStatus status = "PAID".equalsIgnoreCase(paymentStatus) ?
-                    OrderStatus.PAYED : OrderStatus.PENDING;
+            OrderStatus status = "PAYED".equalsIgnoreCase(paymentStatus) ? OrderStatus.PAYED : OrderStatus.PENDING;
 
             Order order = new Order.Builder()
                     .userId(user.getId())
                     .orderDate(LocalDateTime.now())
-                    .totalAmount(Double.parseDouble("123"))
-                    .status(status)
-                    .build();
-            // Process payment and save order
+                    .status(status).build();
             orderService.processOrder(order);
 
             response.sendRedirect(request.getContextPath() + "/products");

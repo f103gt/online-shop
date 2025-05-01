@@ -9,7 +9,7 @@ public class Order {
     private final int userId;
     private final LocalDateTime orderDate;
     private final LocalDateTime receivalDate;
-    private final BigDecimal totalAmount;
+    private BigDecimal totalAmount;
     private final OrderStatus status;
 
     // Private constructor for builder
@@ -23,12 +23,33 @@ public class Order {
     }
 
     // Getters
-    public int getId() { return id; }
-    public int getUserId() { return userId; }
-    public LocalDateTime getOrderDate() { return orderDate; }
-    public Optional<LocalDateTime> getReceivalDate() { return Optional.ofNullable(receivalDate); }
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public OrderStatus getStatus() { return status; }
+    public int getId() {
+        return id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public Optional<LocalDateTime> getReceivalDate() {
+        return Optional.ofNullable(receivalDate);
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     // Builder class
     public static class Builder {
@@ -39,9 +60,7 @@ public class Order {
         private BigDecimal totalAmount;
         private OrderStatus status;
 
-        public Builder() {
-            // Initialize with default values if needed
-        }
+        public Builder() {}
 
         public Builder id(int id) {
             this.id = id;
@@ -68,11 +87,6 @@ public class Order {
             return this;
         }
 
-        public Builder totalAmount(double totalAmount) {
-            this.totalAmount = BigDecimal.valueOf(totalAmount);
-            return this;
-        }
-
         public Builder status(OrderStatus status) {
             this.status = status;
             return this;
@@ -85,9 +99,6 @@ public class Order {
             }
             if (orderDate == null) {
                 throw new IllegalStateException("Order date is required");
-            }
-            if (totalAmount == null || totalAmount.compareTo(BigDecimal.ZERO) <= 0) {
-                throw new IllegalStateException("Valid total amount is required");
             }
             if (status == null) {
                 throw new IllegalStateException("Status is required");

@@ -1,6 +1,5 @@
 package com.internetshop.dao;
 
-import com.internetshop.model.OrderStatus;
 import com.internetshop.model.Role;
 import com.internetshop.model.User;
 import com.internetshop.configurations.DatabaseConfig;
@@ -11,11 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserRepository implements Repository<User> {
-    // Removed the connection field from constructor
 
-    public UserRepository() {
-        // No connection needed in constructor now
-    }
+    public UserRepository() {}
 
     public void insert(User user) throws SQLException {
         String sql = "INSERT INTO users (username, password, role, email, address) VALUES (?, ?, ?, ?, ?)";

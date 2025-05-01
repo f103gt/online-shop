@@ -64,7 +64,7 @@ public class DatabaseConfig {
                     "order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
                     "receival_date TIMESTAMP, " +
                     "total_amount DECIMAL(10,2) NOT NULL, " +
-                    "status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PROCESSING')))");
+                    "status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PAYED')))");
 
             conn.commit();
             System.out.println("All tables created successfully");

@@ -3,6 +3,7 @@ package com.internetshop.services;
 import com.internetshop.dao.CartRepository;
 import com.internetshop.model.Cart;
 import com.internetshop.model.Product;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.math.BigDecimal;
@@ -17,10 +18,6 @@ public class CartService {
 
     public List<Product> getCartProducts(int userId) throws SQLException {
         return repository.getProductsByUserId(userId);
-    }
-
-    public Cart getCart(int userId) throws SQLException {
-        return repository.getById(userId);
     }
 
     public void addProductToCart(int userId, int productId) throws SQLException {

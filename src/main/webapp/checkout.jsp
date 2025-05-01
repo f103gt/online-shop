@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" name="paymentStatus" value="PAID" class="btn btn-primary">Pay Now</button>
+                            <button type="submit" name="paymentStatus" value="PAYED" class="btn btn-primary">Pay Now</button>
                             <button type="submit" name="paymentStatus" value="PENDING" class="btn btn-secondary">Pay Later</button>
                         </div>
                     </form>

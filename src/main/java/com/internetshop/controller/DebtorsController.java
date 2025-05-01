@@ -1,9 +1,11 @@
 package com.internetshop.controller;
 
 import com.internetshop.dao.BlackListRepository;
+import com.internetshop.dao.CartRepository;
 import com.internetshop.dao.OrderRepository;
 import com.internetshop.model.User;
 import com.internetshop.model.Order;
+import com.internetshop.services.CartService;
 import com.internetshop.services.OrderService;
 import com.internetshop.services.BlackListService;
 import jakarta.servlet.ServletException;
@@ -21,7 +23,10 @@ public class DebtorsController extends HttpServlet {
 
     @Override
     public void init() {
-        this.orderService = new OrderService(new OrderRepository());
+        this.orderService = new OrderService(
+                new OrderRepository(),
+                new CartService(new CartRepository())
+        );
         this.blackListService = new BlackListService(new BlackListRepository());
     }
 
@@ -43,7 +48,7 @@ public class DebtorsController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException{
+            throws IOException {
         try {
             int userId = Integer.parseInt(request.getParameter("userId"));
             int orderId = Integer.parseInt(request.getParameter("orderId"));
