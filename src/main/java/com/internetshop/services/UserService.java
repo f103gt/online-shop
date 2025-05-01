@@ -1,6 +1,7 @@
 package com.internetshop.services;
 
 import com.internetshop.dao.UserRepository;
+import com.internetshop.dao.UserRepositoryInterface;
 import com.internetshop.model.Role;
 import com.internetshop.model.User;
 
@@ -8,9 +9,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserService {
-    private final UserRepository repository;
+    private final UserRepositoryInterface repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepositoryInterface repository) {
         this.repository = repository;
     }
 

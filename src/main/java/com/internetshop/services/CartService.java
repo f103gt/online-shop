@@ -1,7 +1,6 @@
 package com.internetshop.services;
 
-import com.internetshop.dao.CartRepository;
-import com.internetshop.model.Cart;
+import com.internetshop.dao.CartRepositoryInterface;
 import com.internetshop.model.Product;
 
 import java.sql.SQLException;
@@ -10,9 +9,9 @@ import java.math.BigDecimal;
 
 
 public class CartService {
-    private final CartRepository repository;
+    private final CartRepositoryInterface repository;
 
-    public CartService(CartRepository repository) {
+    public CartService(CartRepositoryInterface repository) {
         this.repository = repository;
     }
 
