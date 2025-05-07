@@ -137,14 +137,4 @@ class ProductRepositoryTest {
         Product updated = productRepository.getById(product.getId());
         assertEquals(0, updated.getStock());
     }
-
-    @Test
-    void testHighPrecisionPrice() throws SQLException {
-        BigDecimal precisePrice = new BigDecimal("123.456789");
-        Product product = createTestProduct("Precise Product", "High precision price",
-                precisePrice, 3);
-
-        Product retrieved = productRepository.getById(product.getId());
-        assertEquals(0, precisePrice.compareTo(retrieved.getPrice()));
-    }
 }

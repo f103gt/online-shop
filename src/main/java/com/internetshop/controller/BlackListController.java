@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class BlackListController extends HttpServlet {
+public class BlackListController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(BlackListController.class);
     private BlackListService blackListService;
 
@@ -23,7 +23,8 @@ public class BlackListController extends HttpServlet {
         logger.debug("BlackListService initialized with BlackListRepository");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.debug("Processing GET request for blacklist");
 
@@ -40,28 +41,20 @@ public class BlackListController extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException {
         logger.debug("Processing POST request for blacklist");
         String action = request.getParameter("action");
         logger.debug("Action parameter: {}", action);
 
         try {
-            if ("add".equals(action)) {
-                int userId = Integer.parseInt(request.getParameter("userId"));
-                int orderId = Integer.parseInt(request.getParameter("orderId"));
-                logger.info("Adding user {} to blacklist for order {}", userId, orderId);
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
+            logger.info("Adding user {} to blacklist for order {}", userId, orderId);
 
-                blackListService.addToBlackList(userId, orderId);
-                logger.info("Successfully added user {} to blacklist", userId);
-
-            } else if ("remove".equals(action)) {
-                int userId = Integer.parseInt(request.getParameter("userId"));
-                logger.info("Removing user {} from blacklist", userId);
-
-                blackListService.removeFromBlackList(userId);
-                logger.info("Successfully removed user {} from blacklist", userId);
-            }
+            blackListService.addToBlackList(userId, orderId);
+            logger.info("Successfully added user {} to blacklist", userId);
 
             response.sendRedirect(request.getContextPath() + "/black-list");
             logger.debug("Redirected to black-list");

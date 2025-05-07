@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public class DebtorsController extends HttpServlet {
+public class DebtorsController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(DebtorsController.class);
     private OrderService orderService;
     private BlackListService blackListService;
@@ -34,7 +34,8 @@ public class DebtorsController extends HttpServlet {
         logger.debug("Services initialized with their repositories");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.debug("Processing GET request for debtors page");
 
@@ -59,7 +60,8 @@ public class DebtorsController extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         logger.debug("Processing POST request to add debtor to blacklist");
 

@@ -14,7 +14,7 @@ public class InternetShopApplication {
     public static void main(String[] args) throws LifecycleException {
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8080);
-        tomcat.getConnector(); // This line is important to initialize the connector
+        tomcat.getConnector();
 
         // Set base directory
         File baseDir = new File("build/tomcat");
@@ -25,14 +25,12 @@ public class InternetShopApplication {
         String webappDir = "src/main/webapp";
         Context ctx = tomcat.addWebapp("", new File(webappDir).getAbsolutePath());
 
-//        // Proper way to add the listener (using String class name)
-//        ctx.addApplicationListener("org.apache.tomcat.websocket.server.WsContextListener");
-
         // Add Application Listener for Initialization
         ctx.addApplicationListener("com.internetshop.configurations.AppInitializer");
 
         // Add JSP support
-        ctx.addServletContainerInitializer(new org.apache.jasper.servlet.JasperInitializer(), null);
+        ctx.addServletContainerInitializer(new org.apache.jasper.servlet.JasperInitializer(),
+                null);
 
         // Register AuthenticationFilter
         FilterDef filterDef = new FilterDef();

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class OrderController extends HttpServlet {
+public class OrderController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     private OrderService orderService;
 
@@ -27,7 +27,8 @@ public class OrderController extends HttpServlet {
         logger.debug("OrderService initialized with OrderRepository and CartService");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         logger.debug("Processing GET request for order checkout");
         try {
             HttpSession session = request.getSession();
@@ -48,7 +49,8 @@ public class OrderController extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
         logger.debug("Processing POST request for new order");
         try {
