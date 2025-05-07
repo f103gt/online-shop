@@ -14,10 +14,9 @@ import java.util.List;
 
 public class BlackListController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(BlackListController.class);
-    private BlackListService blackListService;
+    private final BlackListService blackListService;
 
-    @Override
-    public void init() {
+    public BlackListController() {
         logger.info("Initializing BlackListController");
         this.blackListService = new BlackListService(new BlackListRepository());
         logger.debug("BlackListService initialized with BlackListRepository");

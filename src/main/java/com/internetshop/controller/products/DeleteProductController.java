@@ -15,10 +15,9 @@ import java.sql.SQLException;
 
 public class DeleteProductController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(DeleteProductController.class);
-    private ProductService productService;
+    private final ProductService productService;
 
-    @Override
-    public void init() {
+    public DeleteProductController() {
         this.productService = new ProductService(new ProductRepository());
     }
 

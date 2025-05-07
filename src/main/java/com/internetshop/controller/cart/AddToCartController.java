@@ -14,10 +14,9 @@ import java.sql.SQLException;
 
 public class AddToCartController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(AddToCartController.class);
-    private CartService cartService;
+    private final CartService cartService;
 
-    @Override
-    public void init() {
+    public AddToCartController() {
         this.cartService = new CartService(new CartRepository());
     }
 

@@ -18,10 +18,9 @@ import java.time.LocalDateTime;
 
 public class OrderController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
-    private OrderService orderService;
+    private final OrderService orderService;
 
-    @Override
-    public void init() {
+    public OrderController() {
         logger.info("Initializing OrderController");
         this.orderService = new OrderService(new OrderRepository(), new CartService(new CartRepository()));
         logger.debug("OrderService initialized with OrderRepository and CartService");

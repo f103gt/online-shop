@@ -46,10 +46,6 @@ public class FrontController extends HttpServlet {
         controllers.put("/black-list", new BlackListController());
         controllers.put("/checkout", new OrderController());
         controllers.put("/debtors", new DebtorsController());
-
-        for (Controller controller : controllers.values()) {
-            controller.init();
-        }
     }
 
     @Override

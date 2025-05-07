@@ -13,10 +13,6 @@ public class HomeController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Override
-    public void init() {
-    }
-
-    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.debug("Showing home page");

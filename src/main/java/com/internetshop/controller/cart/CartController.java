@@ -17,10 +17,9 @@ import java.util.List;
 
 public class CartController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(CartController.class);
-    private CartService cartService;
+    private final CartService cartService;
 
-    @Override
-    public void init() {
+    public CartController() {
         this.cartService = new CartService(new CartRepository());
     }
 

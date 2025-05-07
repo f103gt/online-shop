@@ -16,10 +16,9 @@ import java.util.Optional;
 
 public class RegistrationController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
-    private UserService userService;
+    private final UserService userService;
 
-    @Override
-    public void init() {
+    public RegistrationController() {
         this.userService = new UserService(new UserRepository());
     }
 

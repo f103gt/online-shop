@@ -15,10 +15,9 @@ import java.util.List;
 
 public class ProductController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
-    private ProductService productService;
+    private final ProductService productService;
 
-    @Override
-    public void init() {
+    public ProductController() {
         this.productService = new ProductService(new ProductRepository());
     }
 

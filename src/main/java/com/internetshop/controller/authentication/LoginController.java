@@ -17,11 +17,10 @@ import java.util.Optional;
 
 public class LoginController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    private UserService userService;
+    private final UserService userService;
 
-    @Override
-    public void init() {
-        this.userService = new UserService(new UserRepository());
+    public LoginController() {
+        this.userService =  new UserService(new UserRepository());
     }
 
     @Override

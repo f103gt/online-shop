@@ -20,11 +20,10 @@ import java.util.Map;
 
 public class DebtorsController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(DebtorsController.class);
-    private OrderService orderService;
-    private BlackListService blackListService;
+    private final OrderService orderService;
+    private final BlackListService blackListService;
 
-    @Override
-    public void init() {
+    public DebtorsController() {
         logger.info("Initializing DebtorsController");
         this.orderService = new OrderService(
                 new OrderRepository(),

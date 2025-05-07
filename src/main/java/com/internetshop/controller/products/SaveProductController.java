@@ -17,10 +17,9 @@ import java.sql.SQLException;
 
 public class SaveProductController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(SaveProductController.class);
-    private ProductService productService;
+    private final ProductService productService;
 
-    @Override
-    public void init() {
+    public SaveProductController() {
         this.productService = new ProductService(new ProductRepository());
     }
 

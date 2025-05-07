@@ -12,11 +12,6 @@ public class LogoutController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(LogoutController.class);
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         logger.debug("Processing logout request");

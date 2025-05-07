@@ -14,10 +14,9 @@ import java.sql.SQLException;
 
 public class RemoveFromCartController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(RemoveFromCartController.class);
-    private CartService cartService;
+    private final CartService cartService;
 
-    @Override
-    public void init() {
+    public RemoveFromCartController() {
         this.cartService = new CartService(new CartRepository());
     }
 

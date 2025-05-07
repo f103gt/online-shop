@@ -14,12 +14,9 @@ public class AddProductController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(AddProductController.class);
 
     @Override
-    public void init() {
-    }
-
-    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        logger.debug("Showing add product page");
         User user = (User) request.getSession().getAttribute("user");
         if (user == null || user.getRole() != Role.ADMIN) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
